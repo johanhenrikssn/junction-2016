@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "Multi Sources",
+  "description": "Recommend similar news.",
+  "version": "0.0.1",
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "permissions": [
+    "activeTab"
+  ]
+}

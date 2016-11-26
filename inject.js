@@ -3,7 +3,7 @@
 
 const run = (title) => {
   const parent_wrapper = setup_wrapper()
-  const wrapper = document.getElementById('wrapper')
+  const wrapper = document.getElementById('presens-wrapper')
 
   wrapper.innerHTML = '<p class="presens-p">Loading...</p>'
 
@@ -22,11 +22,11 @@ const run = (title) => {
         return fetch(PROXY_URL + related_stories_url, { headers })
           .then(res => res.json())
           .then(body => {
-            render(body.related_stories, body.story_title, "Related articles")
+            render(body.related_stories, body.story_title, "Related articles", wrapper)
           })
       // No exact match 
       } else {
-          render(body.stories, title, "These articles might be related")
+          render(body.stories, title, "These articles might be related",wrapper)
       }
     })
 }
@@ -51,19 +51,19 @@ var headers = new Headers({
   'X-AYLIEN-NewsAPI-Application-Key': app_key
 })
 
-const render = (stories, title, description_text) => {
+const render = (stories, title, description_text, wrapper) => {
   wrapper.innerHTML = `
   <div id="presens-close"></div>
-  <h2 id="description" class="presens-h2"></h2>
+  <h2 id="presens-description" class="presens-h2"></h2>
   <div id="sources"></div>
   <div id="presens-explanation"></div>
   `
   const sources = document.getElementById('sources')
-  const explanation = document.getElementById('explanation')
-  const close = document.getElementById('close')
-  const description = document.getElementById('description')
+  const explanation = document.getElementById('presens-explanation')
+  const close = document.getElementById('presens-close')
+  const description = document.getElementById('presens-description')
   
-  document.getElementById('close').addEventListener('click', () => {
+  document.getElementById('presens-close').addEventListener('click', () => {
     parent_wrapper.remove()
   });
   

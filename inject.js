@@ -19,7 +19,7 @@ const run = (title) => {
         return fetch(PROXY_URL + related_stories_url, { headers })
           .then(res => res.json())
           .then(body => {
-            render(body.related_stories, body.story.title, "Related articles")
+            render(body.related_stories, body.story_title, "Related articles")
           })
       // No exact match 
       } else {
@@ -71,10 +71,20 @@ const render = (stories, title, description_text) => {
 }
 
 const render_stories = (element, stories) => {
+  const emoji_map = {
+    positive: '🙂',
+    negative: '🙁',
+    neutral: '😐' 
+  }
+
   element.innerHTML = stories.map(story => {
     return `
       <article>
-        <h3><a href="${story.links.permalink}">${story.title}</a></h3>
+        <h3>
+          <a href="${story.links.permalink}">${story.title} 
+            ${emoji_map[story.sentiment.body.polarity]}
+          </a>
+        </h3>
         <p class="source">${story.source.name}</p>
       </article>
     `

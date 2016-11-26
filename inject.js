@@ -2,8 +2,12 @@
 'use strict';
 
 const run = (title) => {
-  const wrapper = setup_wrapper()
-  wrapper.innerHTML = 'Loading...'
+  const parent_wrapper = setup_wrapper()
+  const wrapper = document.getElementById('presens-wrapper')
+
+  wrapper.innerHTML = '<p class="presens-p">Loading...</p>'
+
+
   const encoded_title = window.encodeURIComponent(title)
 
   fetch(
@@ -11,7 +15,6 @@ const run = (title) => {
     { headers })
     .then(res => res.json())
     .then(body => {  
-      
       const index = body.stories.findIndex(story => story.title === title)
       
       // Exact match
@@ -80,19 +83,23 @@ var headers = new Headers({
 })
 
 const render = (stories, title, description_text) => {
+  const wrapper = document.getElementById('presens-wrapper')
+  const parent_wrapper = document.getElementById('parent-wrapper')
+
   wrapper.innerHTML = `
-  <div id="close"></div>
-  <h2 id="description"></h2>
+  <div id="presens-close"></div>
+  <h2 id="presens-description" class="presens-h2"></h2>
   <div id="sources"></div>
-  <div id="explanation"></div>
+  <div id="presens-explanation"></div>
   `
   const sources = document.getElementById('sources')
-  const explanation = document.getElementById('explanation')
-  const close = document.getElementById('close')
-  const description = document.getElementById('description')
+  const explanation = document.getElementById('presens-explanation')
+  const close = document.getElementById('presens-close')
+  const description = document.getElementById('presens-description')
+
   
-  document.getElementById('close').addEventListener('click', () => {
-    wrapper.remove()
+  document.getElementById('presens-close').addEventListener('click', () => {
+    parent_wrapper.remove()
   });
   
   description.innerHTML = description_text
@@ -110,13 +117,13 @@ const render_stories = (element, stories) => {
 
   element.innerHTML = stories.map(story => {
     return `
-      <article>
-        <h3>
-          <a href="${story.links.permalink}">${story.title} 
-            ${emoji_map[story.sentiment.body.polarity]}
+      <article class="presens-article">
+        <h3 class="presens-h3">
+          <a class="presens-a" href="${story.links.permalink}">
+            ${emoji_map[story.sentiment.body.polarity]}  ${story.title}        
           </a>
         </h3>
-        <p class="source">${story.source.name}</p>
+        <p class="source presens-p">${story.source.name}</p>
       </article>
     `
   }).join('')
@@ -124,15 +131,18 @@ const render_stories = (element, stories) => {
 
 const render_explanation = (element, title) => {
   element.innerHTML = `
-    <p class="faded">Additional sources found by searching for: "${title}"</p>
+    <p class="presens-faded presens-p">Additional sources found by searching for: "${title}"</p>
   `
 }
 
 const setup_wrapper = () => {
-  const wrapper = document.createElement('div')
-  wrapper.id = 'wrapper'
-  document.body.append(wrapper)
-  return wrapper
+  const parent_wrapper = document.createElement('div')
+  parent_wrapper.id = 'parent-wrapper'
+  document.body.append(parent_wrapper)
+
+  parent_wrapper.innerHTML = '<div id="presens-wrapper"></div>'
+
+  return parent_wrapper
 }
 
 // Input from extension.

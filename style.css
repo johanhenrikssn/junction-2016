@@ -1,8 +1,8 @@
-*, *:before, *:after { box-sizing: border-box; }
-html { -webkit-font-smoothing: antialiased; }
-body { font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif; font-size: 14px; margin: 0; }
-
-#wrapper {
+#parent-wrapper {
+   all: initial;
+}
+#presens-wrapper {
+  -webkit-font-smoothing: antialiased;
   background-color: white;
   border-radius: 3px;
   border: 1px solid #cccccc;
@@ -16,46 +16,52 @@ body { font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco",
   max-height: 50%;
   overflow-y: auto;
 }
-
-h2 {
+.presens-h2 {
+  font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif !important; 
   font-size: 1em;
   font-weight: normal;
   margin-bottom: 1em;
   margin-top: 0;
   text-align: center;
-  text-transform: uppercase;
+  text-transform: uppercase !important;
 }
-h3 {
+.presens-h3 {
+  font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif !important; 
   font-size: 1.2em;
   margin-bottom: .5em;
   margin-top: 0;
 }
-p {
+.presens-p {  
+  font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif !important; 
+  font-size: 1em;
   margin: 0;
   color: #777777;
 }
-button {
-  cursor: pointer;
-  font-size: 2em;
-}
-article {
+.presens-a:link { 
+  color: #0000FF; 
+  font-size: 1em;
+}  
+.presens-a:hover {  border-bottom: thin solid; }
+.presens-a:visited { color: #800080; }  
+.presens-a:active   { color: #FF0000; }  
+.presens-article {
   margin-bottom: 1em;
   padding-bottom: 1em;
   border-bottom: 1px solid #eeeeee;
 }
-article:last-of-type {
+.presens-article:last-of-type {
   border-bottom: 0;
   margin-bottom: 0;
   padding-bottom: 0;
 }
-#explanation {
+#presens-explanation {
   margin-top: 3em;
   text-align: center;
 }
-.faded {
+.presens-faded {
   font-style: italic;
 }
-#close {
+#presens-close {
   position: absolute;
   cursor: pointer;
   top: 0;

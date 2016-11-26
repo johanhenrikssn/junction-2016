@@ -4,7 +4,7 @@ var current_title;
 'use strict'
 
 document.addEventListener('mousedown', (elem) => {
-  current_title = elem.target.innerHTML
+  current_title = elem.target.innerText.replace(/\s+/, ' ')
 })
 
 })()

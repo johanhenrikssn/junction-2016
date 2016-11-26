@@ -43,8 +43,8 @@ const decode_query = (raw) => {
   return result
 }
 
-const { app_id, app_key } = decode_query(window.location.search)
-const PROXY_URL = 'http://localhost:8888/proxy/'
+const { app_id, app_key, ngrok_id } = decode_query(window.location.search)
+const PROXY_URL = `https://${ngrok_id}.ngrok.io/proxy/`
 const BASE_URL = PROXY_URL + 'https://api.newsapi.aylien.com/api/v1'
 var headers = new Headers({
   'X-AYLIEN-NewsAPI-Application-ID': app_id,

@@ -1,10 +1,8 @@
 #parent-wrapper {
    all: initial;
 }
-
 #presens-wrapper {
   -webkit-font-smoothing: antialiased;
-
   background-color: white;
   border-radius: 3px;
   border: 1px solid #cccccc;
@@ -18,10 +16,8 @@
   max-height: 50%;
   overflow-y: auto;
 }
-
 .presens-h2 {
   font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif !important; 
-
   font-size: 1em;
   font-weight: normal;
   margin-bottom: 1em;
@@ -31,24 +27,23 @@
 }
 .presens-h3 {
   font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif !important; 
-
   font-size: 1.2em;
   margin-bottom: .5em;
   margin-top: 0;
 }
 .presens-p {  
   font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif !important; 
-
+  font-size: 1em;
   margin: 0;
   color: #777777;
 }
-
-.presens-a {
-  color: black;
-}
-.presens-a:hover {
-  color: black;
-}
+.presens-a:link { 
+  color: #0000FF; 
+  font-size: 1em;
+}  
+.presens-a:hover {  border-bottom: thin solid; }
+.presens-a:visited { color: #800080; }  
+.presens-a:active   { color: #FF0000; }  
 .presens-article {
   margin-bottom: 1em;
   padding-bottom: 1em;

@@ -1,0 +1,25 @@
+{
+  "name": "junction-2016",
+  "version": "1.0.0",
+  "description": "Baller hacks in Helsinki.",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johanhenrikssn/junction-2016.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/johanhenrikssn/junction-2016/issues"
+  },
+  "homepage": "https://github.com/johanhenrikssn/junction-2016#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "twit": "^2.2.5"
+  },
+  "devDependencies": {}
+}

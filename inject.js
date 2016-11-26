@@ -8,71 +8,86 @@ const run = (title) => {
   wrapper.innerHTML = '<p class="presens-p">Loading...</p>'
 
 
+
   const encoded_title = window.encodeURIComponent(title)
 
   fetch(
     `${BASE_URL}/stories?title=${encoded_title}&published_at.start=NOW-7DAYS&published_at.end=NOW&language=en&sort_by=relevance`,
     { headers })
     .then(res => res.json())
-    .then(body => {  
+    .then(body => {
       const index = body.stories.findIndex(story => story.title === title)
-      
+      var key_words =  body.stories[index !== -1 ? index : 0].keywords.slice(0, 3).join(' ')
+      var timestamp = '2016-11-25'
       // Exact match
-      if (-1 !== index) { 
+      if (-1 !== index) {
         const related_stories_url = body.stories[index].links.related_stories
         return fetch(PROXY_URL + related_stories_url, { headers })
           .then(res => res.json())
           .then(body => {
             render(body.related_stories, body.story_title, "Related articles")
-            get_sentiments()
+            fetch(`http://localhost:3000/${key_words}/${timestamp}`)
+              .then(res => res.json())
+              .then(res => {
+                var tweets = res.statuses.map(x => {return {'text': x.text }});
+                get_sentiments(tweets)
+            })
+
+
           })
-          
-      // No exact match 
+
+      // No exact match
       } else {
           render(body.stories, title, "These articles might be related")
-          get_sentiments()
+          fetch(`http://localhost:3000/${key_words}/${timestamp}`)
+            .then(res => res.json())
+            .then(res => {
+              var tweets = res.statuses.map(x => {return {'text': x.text }});
+              get_sentiments(tweets)
+          })
       }
     })
 }
 
-const get_sentiments = () => {
+const get_sentiments = (tweets) => {
   var wrapper = document.getElementById('presens-wrapper')
   var request = new Request('http://www.sentiment140.com/api/bulkClassifyJson', {
-    method: 'POST', 
-    body: JSON.stringify({"data": [{"text": "I love Titanic."}, 
-      {"text": "I Titanic."}, 
-      {"text": "I love Titanic."}, 
-      {"text": "I feel Titanic."}, 
-      {"text": "I do Titanic."}, 
-      {"text": " Titanic?"}, 
-      {"text": "Titanic."},
-      {"text": "I hate Titanic."}]})
+    method: 'POST',
+    body: JSON.stringify({"data": tweets})
   });
 
   fetch(request)
     .then(res => res.json())
     .then(body => {
       var sentiments = count_sentiment(body.data)
-      var amount = 8
+
       wrapper.innerHTML = `${wrapper.innerHTML} 
 
       <h2 class="presens-h2" id="presens-twitter-text"> The opinions regarding this subject on Twitter </h2>
       <div class="presens-bar">
         <div class="presens-smile">🙂</div>
-        <div id="presens-positive"></div>
+        <div style="width: 80%; height: 100%; float: left;">
+          <div id="presens-positive"></div>
+        </div>
       </div>
 
       <div class="presens-bar">
         <div class="presens-smile">😐</div>
-        <div id="presens-neutral"></div> 
+        <div style="width: 80%; height: 100%; float: left;">
+          <div id="presens-neutral"></div> 
+        </div>
       </div>
 
       <div class="presens-bar">
         <div class="presens-smile">🙁</div>
-        <div id="presens-negative"></div>  
+        <div style="width: 80%; height: 100%; float: left;">
+          <div id="presens-negative"></div>  
+        </div>
       </div>
 
       `
+      var amount = tweets.length
+      console.log(amount)
 
       const negative = document.getElementById('presens-negative')
       negative.style.width= `${(sentiments['0']/amount)*100}%`;
@@ -82,6 +97,7 @@ const get_sentiments = () => {
 
       const neutral = document.getElementById('presens-positive')
       neutral.style.width= `${(sentiments['4']/amount)*100}%`;
+
     })
 }
 
@@ -91,7 +107,7 @@ const count_sentiment = (arr) => {
     "2":0,
     "4":0
   }
-  
+
   arr.map(x => res[x.polarity.toString()] = res[x.polarity.toString()]+1)
   return res
 }
@@ -130,7 +146,7 @@ const render = (stories, title, description_text) => {
   const explanation = document.getElementById('presens-explanation')
   const close = document.getElementById('presens-close')
   const description = document.getElementById('presens-description')
-  
+
   description.innerHTML = description_text
   close.innerHTML = "&times"
   render_stories(sources, stories.slice(0,3))
@@ -145,7 +161,7 @@ const render_stories = (element, stories) => {
   const emoji_map = {
     positive: '🙂',
     negative: '🙁',
-    neutral: '😐' 
+    neutral: '😐'
   }
 
   element.innerHTML = stories.map(story => {

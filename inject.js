@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Presens</title>
-</head>
-<body>
-<p id="explanation"></p>
-<div id="wrapper">
-  <ul id="links"></ul>
-</div>
-<script>
 (function() {
 'use strict';
 
@@ -71,6 +60,3 @@ const title = 'Takings in service industry slip in Q3'
 run(title)
 
 })();
-</script>
-</body>
-</html>

@@ -1,15 +1,20 @@
 {
-  "manifest_version": 2,
-  "name": "Multi Sources",
-  "description": "Recommend similar news.",
+  "name": "Presens",
   "version": "0.0.1",
+  "manifest_version": 2,
   "background": {
     "scripts": [
       "background.js"
     ],
-    "persistent": false
+    "persistent": true
+  },
+  "browser_action": {
+    "default_title": "Inject!"
   },
   "permissions": [
-    "activeTab"
+    "contextMenus",
+    "https://*/*",
+    "http://*/*",
+    "tabs"
   ]
 }

@@ -22,11 +22,11 @@ const run = (title) => {
         return fetch(PROXY_URL + related_stories_url, { headers })
           .then(res => res.json())
           .then(body => {
-            render(body.related_stories, body.story_title, "Related articles", wrapper)
+            render(body.related_stories, body.story_title, "Related articles")
           })
       // No exact match 
       } else {
-          render(body.stories, title, "These articles might be related",wrapper)
+          render(body.stories, title, "These articles might be related")
       }
     })
 }
@@ -51,7 +51,10 @@ var headers = new Headers({
   'X-AYLIEN-NewsAPI-Application-Key': app_key
 })
 
-const render = (stories, title, description_text, wrapper) => {
+const render = (stories, title, description_text) => {
+  const wrapper = document.getElementById('presens-wrapper')
+  const parent_wrapper = document.getElementById('parent-wrapper')
+
   wrapper.innerHTML = `
   <div id="presens-close"></div>
   <h2 id="presens-description" class="presens-h2"></h2>
@@ -62,6 +65,7 @@ const render = (stories, title, description_text, wrapper) => {
   const explanation = document.getElementById('presens-explanation')
   const close = document.getElementById('presens-close')
   const description = document.getElementById('presens-description')
+
   
   document.getElementById('presens-close').addEventListener('click', () => {
     parent_wrapper.remove()

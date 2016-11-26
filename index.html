@@ -22,13 +22,14 @@ const render_stories_list = (stories) => {
 const run = (title) => {
   const encoded_title = window.encodeURIComponent(title)
   fetch(
-    `${BASE_URL}/stories?title=${encoded_title}&published_at.start=NOW-4DAYS&published_at.end=NOW`,
+    `${BASE_URL}/stories?title=${encoded_title}&published_at.start=NOW-7DAYS&published_at.end=NOW&language=en`,
     { headers })
     .then(res => res.json())
     .then(body => {
       const index = body.stories.findIndex(story => story.title === title)
       if (-1 !== index) { 
-        return fetch(PROXY_URL + body.stories[index].links.related_stories, { headers })
+        const related_stories_url = body.stories[index].links.related_stories
+        return fetch(PROXY_URL + related_stories_url, { headers })
           .then(res => res.json())
           .then(body => {
             explanation.innerHTML = 'Showing related stories'

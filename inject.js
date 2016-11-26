@@ -9,8 +9,10 @@ const render_stories_list = (stories) => {
 }
 
 const run = (title) => {
-  const wrapper = setup_wrapper()
-  wrapper.innerHTML = 'Loading...'
+  const parent_wrapper = setup_wrapper()
+  const wrapper = document.getElementById('wrapper')
+
+  wrapper.innerHTML = '<p class="presens-p">Loading...</p>'
 
   const encoded_title = window.encodeURIComponent(title)
   console.log(encoded_title)
@@ -22,7 +24,7 @@ const run = (title) => {
     .then(body => {
       wrapper.innerHTML = `
         <div id="close">&times;</div>
-        <h2>Related articles</h2>
+        <h2 class="presens-h2">Related articles</h2>
         <div id="sources"></div>
         <div id="explanation"></div>
       `
@@ -32,7 +34,7 @@ const run = (title) => {
 
       render_explanation(explanation, body)
       document.getElementById('close').addEventListener('click', () => {
-        wrapper.remove()
+        parent_wrapper.remove()
       });
 
       const index = body.stories.findIndex(story => story.title === title)
@@ -76,7 +78,7 @@ var headers = new Headers({
 const explanation = document.getElementById('explanation')
 const wrapper = document.getElementById('wrapper')
 
-  /*
+/*
 const add_wrapper = (list) => {
   const wrapper = document.createElement('p');
   wrapper.style.position = 'fixed';
@@ -92,9 +94,9 @@ const add_wrapper = (list) => {
 const render_stories = (element, stories) => {
   element.innerHTML = stories.map(story => {
     return `
-      <article>
-        <h3><a href="${story.links.permalink}">${story.title}</a></h3>
-        <p class="source">${story.source.name}</p>
+      <article class="presens-article">
+        <h3 class="presens-h3"><a href="${story.links.permalink}">${story.title}</a></h3>
+        <p class="source presens-p">${story.source.name}</p>
       </article>
     `
   }).join('')
@@ -103,15 +105,18 @@ const render_stories = (element, stories) => {
 const render_explanation = (element, payload) => {
   console.log('render_explanation', payload)
   element.innerHTML = `
-    <p class="faded">Additional sources found by searching for: "${payload.story_title}"</p>
+    <p class="faded presens-p">Additional sources found by searching for: "${payload.story_title}"</p>
   `
 }
 
 const setup_wrapper = () => {
-  const wrapper = document.createElement('div')
-  wrapper.id = 'wrapper'
-  document.body.append(wrapper)
-  return wrapper
+  const parent_wrapper = document.createElement('div')
+  parent_wrapper.id = 'parent-wrapper'
+  document.body.append(parent_wrapper)
+
+  parent_wrapper.innerHTML = '<div id="wrapper"></div>'
+
+  return parent_wrapper
 }
 
 // Input from extension.

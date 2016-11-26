@@ -1,8 +1,13 @@
-*, *:before, *:after { box-sizing: border-box; }
-html { -webkit-font-smoothing: antialiased; }
-body { font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif; font-size: 14px; margin: 0; }
+
+
+#parent-wrapper {
+   all: initial;
+}
 
 #wrapper {
+  -webkit-font-smoothing: antialiased;
+  font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif; 
+
   background-color: white;
   border-radius: 3px;
   border: 1px solid #cccccc;
@@ -15,9 +20,10 @@ body { font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco",
   transform: translate(-50%, -50%);
   max-height: 50%;
   overflow-y: auto;
+
 }
 
-h2 {
+.presens-h2 {
   font-size: 1em;
   font-weight: normal;
   margin-bottom: 1em;
@@ -25,25 +31,21 @@ h2 {
   text-align: center;
   text-transform: uppercase;
 }
-h3 {
+.presens-h3 {
   font-size: 1.2em;
   margin-bottom: .5em;
   margin-top: 0;
 }
-p {
+.presens-p {
   margin: 0;
   color: #777777;
 }
-button {
-  cursor: pointer;
-  font-size: 2em;
-}
-article {
+.presens-article {
   margin-bottom: 1em;
   padding-bottom: 1em;
   border-bottom: 1px solid #eeeeee;
 }
-article:last-of-type {
+.presens-article:last-of-type {
   border-bottom: 0;
   margin-bottom: 0;
   padding-bottom: 0;

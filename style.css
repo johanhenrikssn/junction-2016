@@ -6,7 +6,6 @@
 
 #wrapper {
   -webkit-font-smoothing: antialiased;
-  font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif; 
 
   background-color: white;
   border-radius: 3px;
@@ -24,19 +23,25 @@
 }
 
 .presens-h2 {
+    font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif !important; 
+
   font-size: 1em;
   font-weight: normal;
   margin-bottom: 1em;
   margin-top: 0;
   text-align: center;
-  text-transform: uppercase;
+  text-transform: uppercase !important;
 }
 .presens-h3 {
+    font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif !important; 
+
   font-size: 1.2em;
   margin-bottom: .5em;
   margin-top: 0;
 }
-.presens-p {
+.presens-p {  
+  font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif !important; 
+
   margin: 0;
   color: #777777;
 }

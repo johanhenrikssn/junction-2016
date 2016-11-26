@@ -8,47 +8,65 @@ const run = (title) => {
   wrapper.innerHTML = '<p class="presens-p">Loading...</p>'
 
 
+
   const encoded_title = window.encodeURIComponent(title)
 
   fetch(
     `${BASE_URL}/stories?title=${encoded_title}&published_at.start=NOW-7DAYS&published_at.end=NOW&language=en&sort_by=relevance`,
     { headers })
     .then(res => res.json())
-    .then(body => {  
+    .then(body => {
       const index = body.stories.findIndex(story => story.title === title)
-      
+
       // Exact match
-      if (-1 !== index) { 
+      if (-1 !== index) {
         const related_stories_url = body.stories[index].links.related_stories
         return fetch(PROXY_URL + related_stories_url, { headers })
           .then(res => res.json())
           .then(body => {
             render(body.related_stories, body.story_title, "Related articles")
-            get_sentiments()
+            var key_words = 'FIDEL CASTO DIES'
+            var timestamp = '2016-11-25'
+            //localhost:3000/FIDEL CASTRO DIES/2016-11-01
+            fetch(`http://localhost:3000/${key_words}/${timestamp}`)
+              .then(res => res.json())
+              .then(res => {
+                var tweets = res.statuses.map(x => {return {'text': x.text }});
+                get_sentiments(tweets)
+            })
+
+
           })
-          
-      // No exact match 
+
+      // No exact match
       } else {
           render(body.stories, title, "These articles might be related")
-          get_sentiments()
+          var key_words = 'FIDEL CASTO DIES'
+          var timestamp = '2016-11-25'
+          //localhost:3000/FIDEL CASTRO DIES/2016-11-01
+          fetch(`http://localhost:3000/${key_words}/${timestamp}`)
+            .then(res => res.json())
+            .then(res => {
+              var tweets = res.statuses.map(x => {return {'text': x.text }});
+              get_sentiments(tweets)
+          })
       }
     })
 }
 
-const get_sentiments = () => {
+const get_sentiments = (tweets) => {
   var wrapper = document.getElementById('presens-wrapper')
   var request = new Request('http://www.sentiment140.com/api/bulkClassifyJson', {
-    method: 'POST', 
-    body: JSON.stringify({"data": [{"text": "I love Titanic."}, 
-          {"text": "I hate Titanic."}]})
+    method: 'POST',
+    body: JSON.stringify({"data": tweets})
   });
 
   fetch(request)
     .then(res => res.json())
     .then(body => {
       var sentiments = count_sentiment(body.data)
-      var amount = 2
-      wrapper.innerHTML = `${wrapper.innerHTML} 
+      var amount = tweets.length
+      wrapper.innerHTML = `${wrapper.innerHTML}
       <p> The opinions regarding this subject on Twitter: </p>
       negative: ${(sentiments['0']/amount)*100}%, neutral: ${(sentiments['2']/amount)*100}%,  positive: ${(sentiments['4']/amount)*100}%`
     })
@@ -60,7 +78,7 @@ const count_sentiment = (arr) => {
     "2":0,
     "4":0
   }
-  
+
   arr.map(x => res[x.polarity.toString()] = res[x.polarity.toString()]+1)
   return res
 }
@@ -100,11 +118,11 @@ const render = (stories, title, description_text) => {
   const close = document.getElementById('presens-close')
   const description = document.getElementById('presens-description')
 
-  
+
   document.getElementById('presens-close').addEventListener('click', () => {
     parent_wrapper.remove()
   });
-  
+
   description.innerHTML = description_text
   close.innerHTML = "&times"
   render_stories(sources, stories)
@@ -115,7 +133,7 @@ const render_stories = (element, stories) => {
   const emoji_map = {
     positive: '🙂',
     negative: '🙁',
-    neutral: '😐' 
+    neutral: '😐'
   }
 
   element.innerHTML = stories.map(story => {
@@ -123,7 +141,7 @@ const render_stories = (element, stories) => {
       <article class="presens-article">
         <h3 class="presens-h3">
           <a class="presens-a" href="${story.links.permalink}">
-            ${emoji_map[story.sentiment.body.polarity]}  ${story.title}        
+            ${emoji_map[story.sentiment.body.polarity]}  ${story.title}
           </a>
         </h3>
         <p class="source presens-p">${story.source.name}</p>

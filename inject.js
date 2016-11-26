@@ -53,10 +53,10 @@ var headers = new Headers({
 
 const render = (stories, title, description_text) => {
   wrapper.innerHTML = `
-  <div id="close"></div>
+  <div id="presens-close"></div>
   <h2 id="description" class="presens-h2"></h2>
   <div id="sources"></div>
-  <div id="explanation"></div>
+  <div id="presens-explanation"></div>
   `
   const sources = document.getElementById('sources')
   const explanation = document.getElementById('explanation')
@@ -96,7 +96,7 @@ const render_stories = (element, stories) => {
 
 const render_explanation = (element, title) => {
   element.innerHTML = `
-    <p class="faded presens-p">Additional sources found by searching for: "${title}"</p>
+    <p class="presens-faded presens-p">Additional sources found by searching for: "${title}"</p>
   `
 }
 
@@ -105,7 +105,7 @@ const setup_wrapper = () => {
   parent_wrapper.id = 'parent-wrapper'
   document.body.append(parent_wrapper)
 
-  parent_wrapper.innerHTML = '<div id="wrapper"></div>'
+  parent_wrapper.innerHTML = '<div id="presens-wrapper"></div>'
 
   return parent_wrapper
 }

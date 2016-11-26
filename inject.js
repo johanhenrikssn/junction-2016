@@ -13,6 +13,7 @@ const run = (title) => {
     .then(body => {  
       
       const index = body.stories.findIndex(story => story.title === title)
+      
       // Exact match
       if (-1 !== index) { 
         const related_stories_url = body.stories[index].links.related_stories
@@ -20,12 +21,42 @@ const run = (title) => {
           .then(res => res.json())
           .then(body => {
             render(body.related_stories, body.story_title, "Related articles")
+            
+            var request = new Request('http://www.sentiment140.com/api/bulkClassifyJson', {
+              method: 'POST', 
+              body: JSON.stringify({"data": [{"text": "I love Titanic."}, 
+                    {"text": "I hate Titanic."}]})
+            });
+
+            fetch(request)
+              .then(res => res.json())
+              .then(body => {
+                var sentiments = count_sentiment(body.data)
+                console.log(sentiments)
+                var amount = 2
+                wrapper.innerHTML = `${wrapper.innerHTML} 
+                <p> The opinions regarding this subject on Twitter: </p>
+                negative: ${(sentiments['0']/amount)*100}%, neutral: ${(sentiments['2']/amount)*100}%,  positive: ${(sentiments['4']/amount)*100}%`
+                
+              })
           })
+          
       // No exact match 
       } else {
           render(body.stories, title, "These articles might be related")
       }
     })
+}
+
+const count_sentiment = (arr) => {
+  var res = {
+    "0":0,
+    "2":0,
+    "4":0
+  }
+  
+  arr.map(x => res[x.polarity.toString()] = res[x.polarity.toString()]+1)
+  return res
 }
 
 const decode_query = (raw) => {

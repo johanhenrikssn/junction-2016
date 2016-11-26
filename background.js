@@ -1,4 +1,5 @@
-function searchNews(tab) {
+function searchNews(tab, event) {
+    console.log(event)
     chrome.tabs.executeScript(tab.ib, {
         file: 'inject.js'
     });
@@ -6,7 +7,7 @@ function searchNews(tab) {
 
 chrome.contextMenus.create({
  title: "Similar news",
- contexts:["selection"],  
- onclick: searchUrbanDict  
+ contexts:["link"],  
+ onclick: searchNews 
 });
 

@@ -21,12 +21,14 @@ const run = (title) => {
         return fetch(PROXY_URL + related_stories_url, { headers })
           .then(res => res.json())
           .then(body => {
-            explanation.innerHTML = 'Showing related stories'
-            wrapper.innerHTML = render_stories_list(body.related_stories)
+            // explanation.innerHTML = 'Showing related stories'
+            // wrapper.innerHTML = render_stories_list(body.related_stories)
+            add_wrapper(render_stories_list(body.related_stories))
           })
       } else {
-        explanation.innerHTML = 'These stories might be interesting'
-        wrapper.innerHTML = render_stories_list(body.stories)
+        // explanation.innerHTML = 'These stories might be interesting'
+        // wrapper.innerHTML = render_stories_list(body.stories)
+        add_wrapper(render_stories_list(body.stories))
       }
     })
 }
@@ -54,9 +56,21 @@ var headers = new Headers({
 const explanation = document.getElementById('explanation')
 const wrapper = document.getElementById('wrapper')
 
+const add_wrapper = (list) => {
+  const wrapper = document.createElement('p');
+  wrapper.style.position = 'fixed';
+  wrapper.style.top = 0;
+  wrapper.style.right = 0;
+  wrapper.style.backgroundColor = 'blue';
+  wrapper.style.zIndex = 2;
+  wrapper.innerHTML = list;
+  document.body.appendChild(wrapper);
+}
+
 // Input from extension.
 // const title = 'Duterte and Trump will dramatically recast U.S.-Philippine ties. But how?'
+console.log(h);
 const title = 'Takings in service industry slip in Q3'
-run(title)
+run(h)
 
 })();

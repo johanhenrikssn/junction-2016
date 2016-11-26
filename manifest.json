@@ -8,9 +8,12 @@
     ],
     "persistent": true
   },
-  "browser_action": {
-    "default_title": "Inject!"
-  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["clickListener.js"]
+    }
+  ],
   "permissions": [
     "contextMenus",
     "https://*/*",

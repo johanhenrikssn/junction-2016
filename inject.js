@@ -88,7 +88,7 @@ const render_stories = (element, stories) => {
     return `
       <article class="presens-article">
         <h3 class="presens-h3">
-          <a href="${story.links.permalink}">
+          <a class="presens-a" href="${story.links.permalink}">
             ${emoji_map[story.sentiment.body.polarity]}  ${story.title}        
           </a>
         </h3>

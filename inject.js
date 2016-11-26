@@ -16,7 +16,7 @@ const run = (title) => {
     .then(res => res.json())
     .then(body => {  
       const index = body.stories.findIndex(story => story.title === title)
-      
+      var key_words =  body.stories[index !== -1 ? index : 0].keywords.slice(0, 3).join(' ')
       // Exact match
       if (-1 !== index) { 
         const related_stories_url = body.stories[index].links.related_stories

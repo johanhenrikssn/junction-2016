@@ -1,7 +1,12 @@
-var h;
+var current_title;
+
 (function() {
-	document.addEventListener('mousedown', function(elem) {
-		// console.log(elem.srcElement.innerHTML);
-		h = elem.srcElement.innerHTML;
-	})
+'use strict'
+
+document.addEventListener('mousedown', (elem) => {
+  console.log(elem, elem.target, elem.sourceElement)
+  current_title = elem.target.innerHTML
+  console.log({current_title})
+})
+
 })()

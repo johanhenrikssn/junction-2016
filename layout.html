@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Presens</title>
+  <link rel="stylesheet" href="style.css" media="screen">
+</head>
+<body>
+
+<div id="page">
+  <button id="open">Show additional sources</button>
+</div>
+
+<script>
+(function() {
+'use strict';
+
+const payload = {
+  story_title: 'Wisconsin to recount US election as Trump shapes his White House team',
+  related_stories: [
+    {
+      title: 'Jill Stein set to request recount over \'hack-riddled election\'',
+      source: {
+        name: 'ABC - Australian Broadcasting Corporation',
+      },
+      links: {
+        permalink: 'http://www.abc.net.au/news/2016-11-26/jill-stein-set-to-request-for-us-election-recount-in-wisconsin/8060134'
+      }
+    },
+    {
+      title: 'With recounts looming, Trump adds new administration picks',
+      source: {
+        name: 'South China Morning Post',
+      },
+      links: {
+        permalink: 'http://www.scmp.com/news/world/united-states-canada/article/2049421/recounts-looming-trump-adds-new-administration-picks'
+      }
+    },
+    {
+      title: 'Officials prepare for US vote recount',
+      source: {
+        name: 'Radio New Zealand',
+      },
+      links: {
+        permalink: 'http://www.radionz.co.nz/news/world/319001/officials-prepare-for-us-vote-recount'
+      }
+    }
+  ]
+}
+
+const render_related_stories = (element, payload) => {
+  element.innerHTML = payload.related_stories.map(story => {
+    return `
+      <article>
+        <h3><a href="${story.links.permalink}">${story.title}</a></h3>
+        <p class="source">${story.source.name}</p>
+      </article>
+    `
+  }).join('')
+}
+
+const render_explanation = (element, payload) => {
+  element.innerHTML = `
+    <p class="faded">Additional sources found by searching for: "${payload.story_title}"</p>
+  `
+}
+
+const setup_wrapper = () => {
+  const wrapper = document.createElement('div')
+  wrapper.id = 'wrapper'
+  document.body.append(wrapper)
+  return wrapper
+}
+
+// Running
+const run = () => {
+  const wrapper = setup_wrapper()
+  wrapper.innerHTML = 'Loading...'
+  setTimeout(() => {
+    wrapper.innerHTML = `
+      <div id="close">&times;</div>
+      <h2>Related articles</h2>
+      <div id="sources"></div>
+      <div id="explanation"></div>
+    `
+    const stories = document.getElementById('sources')
+    const explanation = document.getElementById('explanation')
+    render_related_stories(stories, payload)
+    render_explanation(explanation, payload)
+    document.getElementById('close').addEventListener('click', () => {
+      wrapper.remove()
+    });
+  }, 1000)
+}
+
+document.getElementById('open').addEventListener('click', run)
+
+})();
+</script>
+</body>
+</html>

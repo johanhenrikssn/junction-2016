@@ -9,12 +9,32 @@ const render_stories_list = (stories) => {
 }
 
 const run = (title) => {
+  const wrapper = setup_wrapper()
+  wrapper.innerHTML = 'Loading...'
+
   const encoded_title = window.encodeURIComponent(title)
+  console.log(encoded_title)
+
   fetch(
-    `${BASE_URL}/stories?title=${encoded_title}&published_at.start=NOW-7DAYS&published_at.end=NOW&language=en`,
+    `${BASE_URL}/stories?title=${encoded_title}&published_at.start=NOW-7DAYS&published_at.end=NOW&language=en&sort_by=relevance`,
     { headers })
     .then(res => res.json())
     .then(body => {
+      wrapper.innerHTML = `
+        <div id="close">&times;</div>
+        <h2>Related articles</h2>
+        <div id="sources"></div>
+        <div id="explanation"></div>
+      `
+
+      const stories = document.getElementById('sources')
+      const explanation = document.getElementById('explanation')
+
+      render_explanation(explanation, body)
+      document.getElementById('close').addEventListener('click', () => {
+        wrapper.remove()
+      });
+
       const index = body.stories.findIndex(story => story.title === title)
       if (-1 !== index) { 
         const related_stories_url = body.stories[index].links.related_stories
@@ -23,12 +43,12 @@ const run = (title) => {
           .then(body => {
             // explanation.innerHTML = 'Showing related stories'
             // wrapper.innerHTML = render_stories_list(body.related_stories)
-            add_wrapper(render_stories_list(body.related_stories))
+            render_stories(stories, body.related_stories)
           })
       } else {
         // explanation.innerHTML = 'These stories might be interesting'
         // wrapper.innerHTML = render_stories_list(body.stories)
-        add_wrapper(render_stories_list(body.stories))
+        render_stories(stories, body.stories)
       }
     })
 }
@@ -56,6 +76,7 @@ var headers = new Headers({
 const explanation = document.getElementById('explanation')
 const wrapper = document.getElementById('wrapper')
 
+  /*
 const add_wrapper = (list) => {
   const wrapper = document.createElement('p');
   wrapper.style.position = 'fixed';
@@ -66,11 +87,35 @@ const add_wrapper = (list) => {
   wrapper.innerHTML = list;
   document.body.appendChild(wrapper);
 }
+*/
+
+const render_stories = (element, stories) => {
+  element.innerHTML = stories.map(story => {
+    return `
+      <article>
+        <h3><a href="${story.links.permalink}">${story.title}</a></h3>
+        <p class="source">${story.source.name}</p>
+      </article>
+    `
+  }).join('')
+}
+
+const render_explanation = (element, payload) => {
+  console.log('render_explanation', payload)
+  element.innerHTML = `
+    <p class="faded">Additional sources found by searching for: "${payload.story_title}"</p>
+  `
+}
+
+const setup_wrapper = () => {
+  const wrapper = document.createElement('div')
+  wrapper.id = 'wrapper'
+  document.body.append(wrapper)
+  return wrapper
+}
 
 // Input from extension.
-// const title = 'Duterte and Trump will dramatically recast U.S.-Philippine ties. But how?'
-console.log(h);
-const title = 'Takings in service industry slip in Q3'
-run(h)
+console.log(current_title)
+run(current_title)
 
-})();
+})()

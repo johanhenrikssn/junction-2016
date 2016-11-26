@@ -1,54 +1,29 @@
 (function() {
 'use strict';
 
-const render_stories_list = (stories) => {
-  return stories.map(story => `
-    <li>
-      <a href="${story.links.permalink}">${story.title}</a>
-    </li>`).join('')
-}
-
 const run = (title) => {
   const wrapper = setup_wrapper()
   wrapper.innerHTML = 'Loading...'
-
   const encoded_title = window.encodeURIComponent(title)
-  console.log(encoded_title)
 
   fetch(
     `${BASE_URL}/stories?title=${encoded_title}&published_at.start=NOW-7DAYS&published_at.end=NOW&language=en&sort_by=relevance`,
     { headers })
     .then(res => res.json())
-    .then(body => {
-      wrapper.innerHTML = `
-        <div id="close">&times;</div>
-        <h2>Related articles</h2>
-        <div id="sources"></div>
-        <div id="explanation"></div>
-      `
-
-      const stories = document.getElementById('sources')
-      const explanation = document.getElementById('explanation')
-
-      render_explanation(explanation, body)
-      document.getElementById('close').addEventListener('click', () => {
-        wrapper.remove()
-      });
-
+    .then(body => {  
+      
       const index = body.stories.findIndex(story => story.title === title)
+      // Exact match
       if (-1 !== index) { 
         const related_stories_url = body.stories[index].links.related_stories
         return fetch(PROXY_URL + related_stories_url, { headers })
           .then(res => res.json())
           .then(body => {
-            // explanation.innerHTML = 'Showing related stories'
-            // wrapper.innerHTML = render_stories_list(body.related_stories)
-            render_stories(stories, body.related_stories)
+            render(body.related_stories, body.story.title, "Related articles")
           })
+      // No exact match 
       } else {
-        // explanation.innerHTML = 'These stories might be interesting'
-        // wrapper.innerHTML = render_stories_list(body.stories)
-        render_stories(stories, body.stories)
+          render(body.stories, title, "These articles might be related")
       }
     })
 }
@@ -73,21 +48,27 @@ var headers = new Headers({
   'X-AYLIEN-NewsAPI-Application-Key': app_key
 })
 
-const explanation = document.getElementById('explanation')
-const wrapper = document.getElementById('wrapper')
-
-  /*
-const add_wrapper = (list) => {
-  const wrapper = document.createElement('p');
-  wrapper.style.position = 'fixed';
-  wrapper.style.top = 0;
-  wrapper.style.right = 0;
-  wrapper.style.backgroundColor = 'blue';
-  wrapper.style.zIndex = 2;
-  wrapper.innerHTML = list;
-  document.body.appendChild(wrapper);
+const render = (stories, title, description_text) => {
+  wrapper.innerHTML = `
+  <div id="close"></div>
+  <h2 id="description"></h2>
+  <div id="sources"></div>
+  <div id="explanation"></div>
+  `
+  const sources = document.getElementById('sources')
+  const explanation = document.getElementById('explanation')
+  const close = document.getElementById('close')
+  const description = document.getElementById('description')
+  
+  document.getElementById('close').addEventListener('click', () => {
+    wrapper.remove()
+  });
+  
+  description.innerHTML = description_text
+  close.innerHTML = "&times"
+  render_stories(sources, stories)
+  render_explanation(explanation, title)
 }
-*/
 
 const render_stories = (element, stories) => {
   element.innerHTML = stories.map(story => {
@@ -100,10 +81,9 @@ const render_stories = (element, stories) => {
   }).join('')
 }
 
-const render_explanation = (element, payload) => {
-  console.log('render_explanation', payload)
+const render_explanation = (element, title) => {
   element.innerHTML = `
-    <p class="faded">Additional sources found by searching for: "${payload.story_title}"</p>
+    <p class="faded">Additional sources found by searching for: "${title}"</p>
   `
 }
 

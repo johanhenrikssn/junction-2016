@@ -22,3 +22,9 @@ $ brew cask install ngrok
 # Run ngrok
 $ ngrok http 8888
 ```
+
+For now, keys and stuffs are provided in query parameters, so make sure to set:
+
+```
+?app_id=<app_id>&app_key=<app_key>&ngrok_id=<ngrok_id>
+```

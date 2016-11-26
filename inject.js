@@ -40,17 +40,48 @@ const get_sentiments = () => {
   var request = new Request('http://www.sentiment140.com/api/bulkClassifyJson', {
     method: 'POST', 
     body: JSON.stringify({"data": [{"text": "I love Titanic."}, 
-          {"text": "I hate Titanic."}]})
+      {"text": "I Titanic."}, 
+      {"text": "I love Titanic."}, 
+      {"text": "I feel Titanic."}, 
+      {"text": "I do Titanic."}, 
+      {"text": " Titanic?"}, 
+      {"text": "Titanic."},
+      {"text": "I hate Titanic."}]})
   });
 
   fetch(request)
     .then(res => res.json())
     .then(body => {
       var sentiments = count_sentiment(body.data)
-      var amount = 2
+      var amount = 8
       wrapper.innerHTML = `${wrapper.innerHTML} 
-      <p> The opinions regarding this subject on Twitter: </p>
-      negative: ${(sentiments['0']/amount)*100}%, neutral: ${(sentiments['2']/amount)*100}%,  positive: ${(sentiments['4']/amount)*100}%`
+
+      <h2 class="presens-h2" id="presens-twitter-text"> The opinions regarding this subject on Twitter </h2>
+      <div class="presens-bar">
+        <div class="presens-smile">🙂</div>
+        <div id="presens-positive"></div>
+      </div>
+
+      <div class="presens-bar">
+        <div class="presens-smile">😐</div>
+        <div id="presens-neutral"></div> 
+      </div>
+
+      <div class="presens-bar">
+        <div class="presens-smile">🙁</div>
+        <div id="presens-negative"></div>  
+      </div>
+
+      `
+
+      const negative = document.getElementById('presens-negative')
+      negative.style.width= `${(sentiments['0']/amount)*100}%`;
+
+      const positive = document.getElementById('presens-neutral')
+      positive.style.width= `${(sentiments['2']/amount)*100}%`;
+
+      const neutral = document.getElementById('presens-positive')
+      neutral.style.width= `${(sentiments['4']/amount)*100}%`;
     })
 }
 
@@ -99,16 +130,15 @@ const render = (stories, title, description_text) => {
   const explanation = document.getElementById('presens-explanation')
   const close = document.getElementById('presens-close')
   const description = document.getElementById('presens-description')
-
-  
-  document.getElementById('presens-close').addEventListener('click', () => {
-    parent_wrapper.remove()
-  });
   
   description.innerHTML = description_text
   close.innerHTML = "&times"
-  render_stories(sources, stories)
+  render_stories(sources, stories.slice(0,3))
   render_explanation(explanation, title)
+
+  close.addEventListener('click', () => {
+    parent_wrapper.remove()
+  });
 }
 
 const render_stories = (element, stories) => {
@@ -122,8 +152,9 @@ const render_stories = (element, stories) => {
     return `
       <article class="presens-article">
         <h3 class="presens-h3">
+          <span> ${emoji_map[story.sentiment.body.polarity]} </span>
           <a class="presens-a" href="${story.links.permalink}">
-            ${emoji_map[story.sentiment.body.polarity]}  ${story.title}        
+            ${story.title}        
           </a>
         </h3>
         <p class="source presens-p">${story.source.name}</p>

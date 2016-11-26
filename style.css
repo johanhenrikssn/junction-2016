@@ -13,8 +13,8 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  max-height: 50%;
-  overflow-y: auto;
+  /*max-height: 50%;*/
+  /*overflow-y: auto;*/
 }
 .presens-h2 {
   font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif !important; 
@@ -33,13 +33,14 @@
 }
 .presens-p {  
   font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif !important; 
-  font-size: 1em;
+  font-size: 0.8em;
   margin: 0;
   color: #777777;
 }
 .presens-a:link { 
   color: #0000FF; 
   font-size: 1em;
+  margin-left: 0.4em;
 }  
 .presens-a:hover {  border-bottom: thin solid; }
 .presens-a:visited { color: #800080; }  
@@ -70,3 +71,37 @@
   line-height: 1em;
   font-size: 3em;
 }
+.presens-bar {
+  width: 100%;
+  height: 30px;
+  margin: 0;
+}
+#presens-negative {
+  background-color: #e45858;
+  float: left;
+  height: 100%;
+}
+#presens-positive {
+  background-color: #5ea55e;
+  height: 100%;
+  float: left;
+}
+#presens-neutral {
+  background-color: #eff169;
+  height: 100%;
+  float: left;
+}
+.presens-smile {
+  float: left;
+  width: 10%;
+  text-align: center;
+}
+#presens-twitter-text {
+  margin-top: 3em;
+  text-align: center;
+}
+
+
+
+
+

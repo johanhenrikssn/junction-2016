@@ -17,7 +17,8 @@ const run = (title) => {
     .then(res => res.json())
     .then(body => {
       const index = body.stories.findIndex(story => story.title === title)
-
+      var key_words =  body.stories[index !== -1 ? index : 0].keywords.slice(0, 3).join(' ')
+      var timestamp = '2016-11-25'
       // Exact match
       if (-1 !== index) {
         const related_stories_url = body.stories[index].links.related_stories
@@ -25,9 +26,6 @@ const run = (title) => {
           .then(res => res.json())
           .then(body => {
             render(body.related_stories, body.story_title, "Related articles")
-            var key_words = 'FIDEL CASTO DIES'
-            var timestamp = '2016-11-25'
-            //localhost:3000/FIDEL CASTRO DIES/2016-11-01
             fetch(`http://localhost:3000/${key_words}/${timestamp}`)
               .then(res => res.json())
               .then(res => {
@@ -41,9 +39,6 @@ const run = (title) => {
       // No exact match
       } else {
           render(body.stories, title, "These articles might be related")
-          var key_words = 'FIDEL CASTO DIES'
-          var timestamp = '2016-11-25'
-          //localhost:3000/FIDEL CASTRO DIES/2016-11-01
           fetch(`http://localhost:3000/${key_words}/${timestamp}`)
             .then(res => res.json())
             .then(res => {

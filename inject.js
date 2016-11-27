@@ -134,7 +134,6 @@ var headers = new Headers({
 
 const render = (stories, title, description_text) => {
   const wrapper = document.getElementById('presens-wrapper')
-  const parent_wrapper = document.getElementById('parent-wrapper')
 
   wrapper.innerHTML = `
   <div id="presens-close"></div>
@@ -152,8 +151,11 @@ const render = (stories, title, description_text) => {
   render_stories(sources, stories.slice(0,3))
   render_explanation(explanation, title)
 
+  wrapper.addEventListener('click', () => {
+      document.getElementById('parent-wrapper').remove()
+  });
   close.addEventListener('click', () => {
-    parent_wrapper.remove()
+    document.getElementById('parent-wrapper').remove()
   });
 }
 

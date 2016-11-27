@@ -11,12 +11,6 @@ var T = new Twit({
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 })
 
-q: 'hillary since:2016-11-20'
-
-// search twitter
-// example: 'Hack Junction 2016 since:2016-11-26'
-// query: "Hack Junction 2016"
-// timestamp: "2016-11-26"
 app.get('/:query/:timestamp', function (req, res) {
   T.get('search/tweets', { q: req.params.query + ' since:' + req.params.timestamp, count: 1000 }, function(err, data, response) {
     res.send(data)

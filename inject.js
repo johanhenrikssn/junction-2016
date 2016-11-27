@@ -18,7 +18,9 @@ const run = (title) => {
     .then(body => {
       const index = body.stories.findIndex(story => story.title === title)
       var key_words =  body.stories[index !== -1 ? index : 0].keywords.slice(0, 3).join(' ')
-      var timestamp = '2016-11-25'
+      var today = new Date()
+      var timestamp = today.setDate(today.getDate() - 7)
+      console.log(new Date(timestamp))
       // Exact match
       if (-1 !== index) {
         const related_stories_url = body.stories[index].links.related_stories
@@ -35,7 +37,6 @@ const run = (title) => {
 
 
           })
-
       // No exact match
       } else {
           render(body.stories, title, "These articles might be related")
@@ -63,7 +64,7 @@ const get_sentiments = (tweets) => {
 
       wrapper.innerHTML = `${wrapper.innerHTML} 
 
-      <h2 class="presens-h2" id="presens-twitter-text"> The opinions regarding this subject on Twitter </h2>
+      <h2 class="presens-h2" id="presens-twitter-text"> Twitter opinions this week</h2>
       <div class="presens-bar">
         <div class="presens-smile">🙂</div>
         <div style="width: 80%; height: 100%; float: left;">
@@ -87,7 +88,6 @@ const get_sentiments = (tweets) => {
 
       `
       var amount = tweets.length
-      console.log(amount)
 
       const negative = document.getElementById('presens-negative')
       negative.style.width= `${(sentiments['0']/amount)*100}%`;
@@ -107,7 +107,6 @@ const count_sentiment = (arr) => {
     "2":0,
     "4":0
   }
-
   arr.map(x => res[x.polarity.toString()] = res[x.polarity.toString()]+1)
   return res
 }

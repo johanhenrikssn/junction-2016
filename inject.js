@@ -28,7 +28,7 @@ const run = (title) => {
           .then(res => res.json())
           .then(body => {
             render(body.related_stories, body.story_title, "Related articles")
-            fetch(`http://localhost:3000/${key_words}/${timestamp}`)
+            fetch(`${PROXY_URL_2}${key_words}/${timestamp}`)
               .then(res => res.json())
               .then(res => {
                 var tweets = res.statuses.map(x => {return {'text': x.text }});
@@ -40,7 +40,7 @@ const run = (title) => {
       // No exact match
       } else {
           render(body.stories, title, "These articles might be related")
-          fetch(`http://localhost:3000/${key_words}/${timestamp}`)
+          fetch(`${PROXY_URL_2}${key_words}/${timestamp}`)
             .then(res => res.json())
             .then(res => {
               var tweets = res.statuses.map(x => {return {'text': x.text }});
@@ -52,7 +52,7 @@ const run = (title) => {
 
 const get_sentiments = (tweets) => {
   var wrapper = document.getElementById('presens-wrapper')
-  var request = new Request('http://www.sentiment140.com/api/bulkClassifyJson', {
+  var request = new Request(`${PROXY_URL}http://www.sentiment140.com/api/bulkClassifyJson`, {
     method: 'POST',
     body: JSON.stringify({"data": tweets})
   });
@@ -123,8 +123,9 @@ const decode_query = (raw) => {
   return result
 }
 
-const { app_id, app_key, ngrok_id } = decode_query(window.location.search)
+const { app_id, app_key, ngrok_id, ngrok_id_2 } = decode_query(window.location.search)
 const PROXY_URL = `https://${ngrok_id}.ngrok.io/proxy/`
+const PROXY_URL_2 = `https://${ngrok_id_2}.ngrok.io/`
 const BASE_URL = PROXY_URL + 'https://api.newsapi.aylien.com/api/v1'
 var headers = new Headers({
   'X-AYLIEN-NewsAPI-Application-ID': app_id,
